@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] float runSpeed = 7f;
-    [SerializeField] private float jumpForce = 1200f;                          // Amount of force added when the player jumps.
-    [SerializeField] private float jumpSlowMovement = 5f;
+    [SerializeField] float runSpeed = 10f;
+    [SerializeField] private float jumpForce = 800f;                          // Amount of force added when the player jumps.
 
     [SerializeField] private Transform groundCheck;                           // A position marking where to check if the player is grounded.
     [SerializeField] SpriteRenderer spriteRenderer;
@@ -17,7 +16,6 @@ public class PlayerMovement : MonoBehaviour
 
     float horizontalMove = 0f;
     bool jump = false;
-    bool wasGrounded;
 
     private void Start()
     {
@@ -27,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        horizontalMove = Input.GetAxis("Horizontal") * (wasGrounded ? runSpeed : runSpeed/jumpSlowMovement) * Time.deltaTime;
+        horizontalMove = Input.GetAxis("Horizontal") * runSpeed * Time.deltaTime;
 
         transform.Translate(horizontalMove, 0, 0);
 
@@ -55,8 +53,6 @@ public class PlayerMovement : MonoBehaviour
         // Move our character
         Move(jump);
         jump = false;
-
-        wasGrounded = grounded;
         grounded = false;
 
     }
@@ -78,17 +74,5 @@ public class PlayerMovement : MonoBehaviour
             spriteRenderer.flipX = false;
         if (horizontalMove < 0)
             spriteRenderer.flipX = true;
-    } 
-
-    private T[] CombineArrays<T>(T[] a, T[] b)
-    {
-        T[] combinedArray = new T[a.Length + b.Length];
-
-        for(int i = 0; i < a.Length; i++)
-            combinedArray[i] = a[i];
-        for(int i = 0; i < b.Length; i++)
-            combinedArray[i + a.Length] = b[i];
-
-        return combinedArray;
     }
 }
